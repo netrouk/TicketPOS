@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Point of Sale System - Sales</title>
+  <script>
+    function handleScan(barcode) {
+      document.getElementById('barcode').value = barcode;
+      document.getElementById('sale-form').submit();
+    }
+  </script>
+</head>
+<body>
+  <h1>Sales</h1>
+  <form id="sale-form" method="POST" action="sell.php">
+    <label for="barcode">Scan Barcode:</label>
+    <input type="text" id="barcode" name="barcode" autofocus><br><br>
+    <input type="submit" value="Sell">
+  </form>
+  <script src="https://unpkg.com/@zxing/library@0.18.4"></script>
+  <script>
+    const codeReader = new ZXing.BrowserQRCodeReader();
+
+    codeReader.decodeOnceFromVideoDevice(undefined, 'video').then((result) => {
+      handleScan(result.text);
+    }).catch((err) => {
+      console.error(err);
+    });
+  </script>
+</body>
