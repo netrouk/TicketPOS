@@ -1,0 +1,22 @@
+<?php
+session_start();
+require_once('db.php');
+
+$user_id = $_SESSION['user_id'];
+$barcode = $_POST['barcode'];
+
+$sql = "SELECT * FROM tickets WHERE barcode = '$barcode'";
+$result = mysqli_query($conn, $sql);
+
+if (mysqli_num_rows($result) == 1) {
+  $row = mysqli_fetch_assoc($result);
+  $ticket_id = $row['ticket_id'];
+  $price = $row['price'];
+
+  $sql = "INSERT INTO sales (user_id, ticket_id) VALUES ('$user_id', '$ticket_id')";
+  mysqli_query($conn, $sql);
+
+  header("Location: sales.php?success=true");
+} else {
+  header("Location: sales.php?error=invalid_ticket");
+}
