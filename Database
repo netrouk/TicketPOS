@@ -1,0 +1,26 @@
+CREATE DATABASE pos_system;
+
+USE pos_system;
+
+CREATE TABLE users (
+  user_id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  access_level ENUM('admin', 'staff') NOT NULL DEFAULT 'staff'
+);
+
+CREATE TABLE tickets (
+  ticket_id INT AUTO_INCREMENT PRIMARY KEY,
+  ticket_type VARCHAR(255) NOT NULL,
+  price DECIMAL(10,2) NOT NULL,
+  barcode VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE sales (
+  sale_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  ticket_id INT NOT NULL,
+  sale_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(user_id),
+  FOREIGN KEY (ticket_id) REFERENCES tickets(ticket_id)
+);
